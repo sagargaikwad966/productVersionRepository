@@ -85,12 +85,10 @@ public class ProductServiceImpl implements ProductService,CommandLineRunner
 	}
 
 	@Override
-	public String addProduct(ProductModel productModel) {
+	public void addProduct(ProductModel productModel) {
 		System.out.println("Inside ProductServiceImpl..........................................................");
-		String result = "Successfully saved new product data";
 		jmsTemplate.convertAndSend(JMS_QUEUE, productModel);
 		System.out.println("Message sent from ProductServiceImpl.........................................................." +productModel+ " ");
-		return result;
 	}
 
 	@Override

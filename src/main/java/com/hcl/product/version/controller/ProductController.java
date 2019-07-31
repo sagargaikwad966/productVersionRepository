@@ -53,10 +53,10 @@ public class ProductController {
 		Map<Integer, String> status = new HashMap<Integer, String>();
 		status.put(200, "Successfull updation of products.");
 
-		String msg = productService.addProduct(productModel);
+		productService.addProduct(productModel);
 		ResponseData response = new ResponseData();
-		response.setResponseMessage(msg);
-		response.setData(productModel);
+		
+		response.setData(status);
 		response.setStatus(HttpStatus.OK);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}

@@ -10,7 +10,7 @@ import com.hcl.product.version.model.ProductModel;
 @Service
 public interface ProductService {
 
-	public String addProduct(ProductModel productModel);
+	public void addProduct(ProductModel productModel);
 
 	public List<ProductModel> loadProducts(String filePath);
 
