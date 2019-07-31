@@ -9,18 +9,18 @@ import com.hcl.product.version.service.ReceiveService;
 
 @Component
 public class ProductMessageListener {
-	
+
 	@Autowired
-    private ReceiveService receiveService;
-     
-    @Autowired
-    public ProductMessageListener(ReceiveService receiveService) {
-        this.receiveService = receiveService;
-    }
-     
-    @JmsListener(destination = "jms.queue", containerFactory= "myFactory")
-    public void receiveProduct(ProductModel productModel) {
-    	System.out.println("Inside ProductMessageListener................................................................");
-    	receiveService.registerProduct(productModel);
-    }
+	private ReceiveService receiveService;
+
+	@Autowired
+	public ProductMessageListener(ReceiveService receiveService) {
+		this.receiveService = receiveService;
+	}
+
+	@JmsListener(destination = "jms.queue", containerFactory= "myFactory")
+	public void receiveProduct(ProductModel productModel) {
+		System.out.println("Inside ProductMessageListener................................................................");
+		receiveService.registerProduct(productModel);
+	}
 }

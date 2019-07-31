@@ -22,14 +22,13 @@ public class ProductServiceImpl implements ProductService,CommandLineRunner
 {
 	@Autowired
 	ProductRepository productRepository;
-	
+
 	@Autowired
 	LoadObjectUtils loadObjectUtils;
-	
+
 	private static final String JMS_QUEUE = "jms.queue";
 
 	private final JmsTemplate jmsTemplate;
-	
 
 	@Override
 	public List<ProductModel> loadProducts(String filePath) {
@@ -48,98 +47,17 @@ public class ProductServiceImpl implements ProductService,CommandLineRunner
 
 		return productModelList;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	@Override
 	public List<ProductModel> getAllProducts() throws ProductVersionException 
 	{
 		Optional<List<Product>> findByStatusOptional = productRepository.findByStatus("ACTIVE");
-		
+
 		List<Product> productList = new ArrayList<>();
 		List<ProductModel> productModelList = new ArrayList<>();
-		
+
 		boolean isOptionalPresent = findByStatusOptional.isPresent();
-		
+
 		if(isOptionalPresent)
 		{
 			productList = findByStatusOptional.get();
@@ -149,7 +67,7 @@ public class ProductServiceImpl implements ProductService,CommandLineRunner
 				BeanUtils.copyProperties(product, model);
 				productModelList.add(model);
 			}
-			);
+					);
 		}
 		else
 		{
@@ -159,7 +77,7 @@ public class ProductServiceImpl implements ProductService,CommandLineRunner
 	}
 
 
-	
+
 
 	@Autowired
 	public ProductServiceImpl(JmsTemplate jmsTemplate) {
@@ -177,7 +95,6 @@ public class ProductServiceImpl implements ProductService,CommandLineRunner
 
 	@Override
 	public void run(String... args) throws Exception {
-		// TODO Auto-generated method stub
 
 	}
 }

@@ -14,13 +14,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ResponseData {
 
-	
+
 	private String responseMessage;
 	private Map<Integer, String> status;
 	private Object data;
 	public void setStatus(HttpStatus ok) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

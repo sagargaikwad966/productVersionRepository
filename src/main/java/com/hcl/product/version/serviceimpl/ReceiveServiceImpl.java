@@ -26,14 +26,9 @@ public class ReceiveServiceImpl implements ReceiveService {
 
 		Product product = new Product(); 
 
-		System.out.println(
-				"Inside registerProduct method................................................................");
+		System.out.println("Inside registerProduct method................................................................");
 
 		this.receivedProductModelList.add(productModel);
-
-		System.out.println(
-				"Exiting registerProduct method.......... "+productModel+"......................................................");
-
 
 		for(ProductModel productModel1 : receivedProductModelList) { 
 			Optional<Product> productOptional = productRepository.findById(productModel1.getProductId());
@@ -42,29 +37,24 @@ public class ReceiveServiceImpl implements ReceiveService {
 				product = productOptional.get(); 
 			}
 
-			System.out.println( "Fetched Optional Product .......... "+productOptional+"......................................................");
-
 			if (!(productModel.getProductNumber().equals(product.getProductNumber()) &&
 					productModel.getProductId().equals(product.getProductId()) &&
 					productModel.getProductName().equals(product.getProductName()) &&
 					productModel.getPrice().equals(product.getPrice()) &&
-					productModel.getProductDescription().equals(product.getProductDescription()) && 
-					productModel.getVersion().equals(product.getVersion()) &&
-					productModel.getStatus().equals(product.getStatus()))) {
-				
-				System.out.println( "If satisfied .......... "+productOptional+"......................................................");
+					productModel.getProductDescription().equals(product.getProductDescription()) )) {
+
 				Product productNew = new Product();
 
 				BeanUtils.copyProperties(productModel, productNew);
-				//System.out.println( "ProductNew is  .......... "+productNew+"......................................................");
-				product.setStatus("INACTIVE");
-				productRepository.save(product); 
 
-				productNew.setProductId((String.valueOf((Integer.parseInt(productNew.getProductId()) + 1))));
+				product.setStatus("INACTIVE");
+				productRepository.save(product);
+
+				productNew.setVersion("V" + String.valueOf(Integer.parseInt(productNew.getProductId().substring(6)) + 1));
+				productNew.setStatus("ACTIVE");
+				productNew.setProductId(productNew.getProductId().substring(0, 6) + String.valueOf(Integer.parseInt(productNew.getProductId().substring(6, 7)) + 1));
 				productRepository.save(productNew); 
 			} 
 		}
-
 	}
-
 }
