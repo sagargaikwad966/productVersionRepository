@@ -15,6 +15,7 @@ import com.hcl.product.version.exception.ProductVersionException;
 import com.hcl.product.version.model.ProductModel;
 import com.hcl.product.version.repository.ProductRepository;
 import com.hcl.product.version.service.ProductService;
+import com.hcl.product.version.utils.LoadObjectUtils;
 
 @Service
 public class ProductServiceImpl implements ProductService,CommandLineRunner 
@@ -22,11 +23,31 @@ public class ProductServiceImpl implements ProductService,CommandLineRunner
 	@Autowired
 	ProductRepository productRepository;
 	
+	@Autowired
+	LoadObjectUtils loadObjectUtils;
+	
 	private static final String JMS_QUEUE = "jms.queue";
 
 	private final JmsTemplate jmsTemplate;
 	
 
+	@Override
+	public List<ProductModel> loadProducts(String filePath) {
+		List<Product> existingProducts = productRepository.findAll();
+		productRepository.deleteAll(existingProducts);
+		List<Product> products = loadObjectUtils.mappingExcelToProduct(filePath);
+		List<ProductModel> productModelList = new ArrayList<>();
+		productRepository.saveAll(products);
+		// BeanUtils.copyProperties(productRepository.saveAll(products), productModel);
+
+		for (Product product : products) {
+			ProductModel productModel = new ProductModel();
+			BeanUtils.copyProperties(product, productModel);
+			productModelList.add(productModel);
+		}
+
+		return productModelList;
+	}
 	
 	
 	

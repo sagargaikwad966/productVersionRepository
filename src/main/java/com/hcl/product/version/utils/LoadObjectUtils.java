@@ -24,9 +24,9 @@ import com.hcl.product.version.model.ProductModel;
 @Component
 public class LoadObjectUtils
 {	
-	public List<Product> mappingExcelToProduct()
+	public List<Product> mappingExcelToProduct(String filePath)
 	{
-		final String FILE_NAME = "C:/Users/Administrator/Desktop/product.xlsx";
+		final String FILE_NAME = filePath;//"D:/product.xlsx";
 		List<Product> productList = new ArrayList<>();
 		
 		List<String> headerList = new ArrayList<>();

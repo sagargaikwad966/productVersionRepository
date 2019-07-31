@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
+import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -52,6 +53,15 @@ public class ProductControllerTest
 		assertEquals("Successfull Fetch", statusDescription);
 		
 		
+	}
+	
+	@Test
+	public void testLoadProducts() {
+	Mockito.when(productServiceMock.loadProducts(Matchers.any(String.class))).thenReturn(productModelList);
+	ResponseEntity<ResponseData> loadProductsResponse = productController.loadProducts("");
+	assertNotNull(loadProductsResponse);
+	String statusDescription = loadProductsResponse.getBody().getStatus().get(200);
+	assertEquals("Successfull Load", statusDescription);
 	}
 
 }
