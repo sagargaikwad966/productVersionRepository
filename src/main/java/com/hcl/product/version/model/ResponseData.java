@@ -1,6 +1,6 @@
 package com.hcl.product.version.model;
 
-import org.springframework.http.HttpStatus;
+import java.util.Map;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class ResponseData {
 
 	private String responseMessage;
-	private HttpStatus status;
+	private Map<Integer, String> status;
 	private Object data;
 
 }

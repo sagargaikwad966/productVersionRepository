@@ -1,7 +1,7 @@
 package com.hcl.product.version.entity;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -26,7 +26,7 @@ public class Product implements Serializable{
 	private String productName;
 	private String productDescription;
 	private Double price;
-	private LocalDateTime releaseDate;
+	private Date releaseDate;
 	private String version;
 	private String status;
 }

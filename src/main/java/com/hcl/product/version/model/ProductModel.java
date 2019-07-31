@@ -1,6 +1,6 @@
 package com.hcl.product.version.model;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +16,7 @@ public class ProductModel
 	private String productName;
 	private String productDescription;
 	private Double price;
-	private LocalDateTime releaseDate;
+	private Date releaseDate;
 	private String version;
 	private String status;
 
