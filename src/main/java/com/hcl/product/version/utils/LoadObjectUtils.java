@@ -16,26 +16,40 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.hcl.product.version.entity.Product;
 import com.hcl.product.version.model.ProductModel;
-import com.hcl.product.version.repository.ProductRepository;
 
 @Component
-public class LoadObjectUtils 
+public class LoadObjectUtils
 {	
 	public List<Product> mappingExcelToProduct()
 	{
 		final String FILE_NAME = "C:/Users/Administrator/Desktop/product.xlsx";
 		List<Product> productList = new ArrayList<>();
 		
+		List<String> headerList = new ArrayList<>();
+		headerList.add("productId");
+		headerList.add("productNumber");
+		headerList.add("productName");
+		headerList.add("productDescription");
+		headerList.add("price");
+		headerList.add("releaseDate");
+		headerList.add("version");
+		headerList.add("status");
+		
+		FileInputStream excelFile = null;
 		try {
+			excelFile = new FileInputStream(new File(FILE_NAME));
+		
+		
+		try(Workbook workbook = new XSSFWorkbook(excelFile)) 
+		{
+			
 
-            FileInputStream excelFile = new FileInputStream(new File(FILE_NAME));
-            @SuppressWarnings("resource")
-			Workbook workbook = new XSSFWorkbook(excelFile);
+			
+            
             Sheet datatypeSheet = workbook.getSheetAt(0);
             Iterator<Row> iterator = datatypeSheet.iterator();
             Map<String, Integer> headaerMap = new HashMap<>();
@@ -55,46 +69,45 @@ public class LoadObjectUtils
                 		header = cellIterator.next();
                     
                 
-                	if(header.getStringCellValue().equalsIgnoreCase("productId"))
-                		headaerMap.put("productId", header.getColumnIndex());
+                	if(header.getStringCellValue().equalsIgnoreCase(headerList.get(0)))
+                		headaerMap.put(headerList.get(0), header.getColumnIndex());
                 	
-                	else if(header.getStringCellValue().equalsIgnoreCase("productNumber"))
-                		headaerMap.put("productNumber", header.getColumnIndex());
+                	else if(header.getStringCellValue().equalsIgnoreCase(headerList.get(1)))
+                		headaerMap.put(headerList.get(1), header.getColumnIndex());
                 	
-                	else if(header.getStringCellValue().equalsIgnoreCase("productName"))
-                		headaerMap.put("productName", header.getColumnIndex());
+                	else if(header.getStringCellValue().equalsIgnoreCase(headerList.get(2)))
+                		headaerMap.put(headerList.get(2), header.getColumnIndex());
                 	
-                	else if(header.getStringCellValue().equalsIgnoreCase("productDescription"))
-                		headaerMap.put("productDescription", header.getColumnIndex());
+                	else if(header.getStringCellValue().equalsIgnoreCase(headerList.get(3)))
+                		headaerMap.put(headerList.get(3), header.getColumnIndex());
                 	
-                	else if(header.getStringCellValue().equalsIgnoreCase("price"))
-                		headaerMap.put("price", header.getColumnIndex());
+                	else if(header.getStringCellValue().equalsIgnoreCase(headerList.get(4)))
+                		headaerMap.put(headerList.get(4), header.getColumnIndex());
                 	
-                	else if(header.getStringCellValue().equalsIgnoreCase("releaseDate"))
-                		headaerMap.put("releaseDate", header.getColumnIndex());
+                	else if(header.getStringCellValue().equalsIgnoreCase(headerList.get(5)))
+                		headaerMap.put(headerList.get(5), header.getColumnIndex());
                 	
-                	else if(header.getStringCellValue().equalsIgnoreCase("version"))
-                		headaerMap.put("version", header.getColumnIndex());
+                	else if(header.getStringCellValue().equalsIgnoreCase(headerList.get(6)))
+                		headaerMap.put(headerList.get(6), header.getColumnIndex());
                 	
-                	else if(header.getStringCellValue().equalsIgnoreCase("status"))
-                		headaerMap.put("status", header.getColumnIndex());
+                	else if(header.getStringCellValue().equalsIgnoreCase(headerList.get(7)))
+                		headaerMap.put(headerList.get(7), header.getColumnIndex());
                 	
                 	
                     }
-                	System.out.println(headaerMap);
                 }
                 else
                 {
                 	ProductModel model = new ProductModel();
                 	
-                	Cell productNameCells = currentRow.getCell(headaerMap.get("productName"));
-                	Cell productIdCells = currentRow.getCell(headaerMap.get("productId"));
-                	Cell productNumberCells = currentRow.getCell(headaerMap.get("productNumber"));
-                	Cell productDescriptionCells = currentRow.getCell(headaerMap.get("productDescription"));
-                	Cell priceCells = currentRow.getCell(headaerMap.get("price"));
-                	Cell releaseDateCells = currentRow.getCell(headaerMap.get("releaseDate"));
-                	Cell versionCells = currentRow.getCell(headaerMap.get("version"));
-                	Cell statusCells = currentRow.getCell(headaerMap.get("status"));
+                	Cell productNameCells = currentRow.getCell(headaerMap.get(headerList.get(2)));
+                	Cell productIdCells = currentRow.getCell(headaerMap.get(headerList.get(0)));
+                	Cell productNumberCells = currentRow.getCell(headaerMap.get(headerList.get(1)));
+                	Cell productDescriptionCells = currentRow.getCell(headaerMap.get(headerList.get(3)));
+                	Cell priceCells = currentRow.getCell(headaerMap.get(headerList.get(4)));
+                	Cell releaseDateCells = currentRow.getCell(headaerMap.get(headerList.get(5)));
+                	Cell versionCells = currentRow.getCell(headaerMap.get(headerList.get(6)));
+                	Cell statusCells = currentRow.getCell(headaerMap.get(headerList.get(7)));
                 	
                 	if(productIdCells != null) 
                             model.setProductId(productIdCells.getStringCellValue());
@@ -126,11 +139,18 @@ public class LoadObjectUtils
                 }
             }
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+		} 
+		catch (IOException e) {
+		} 
+		
+		} catch (FileNotFoundException e1) {
+		}finally {
+			try {
+				excelFile.close();
+			} catch (IOException e) {
+			}
+		}
+
 		return productList;
 	}
 
