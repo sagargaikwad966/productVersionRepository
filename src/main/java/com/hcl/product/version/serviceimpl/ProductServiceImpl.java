@@ -6,6 +6,8 @@ import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 
 import com.hcl.product.version.entity.Product;
@@ -15,10 +17,14 @@ import com.hcl.product.version.repository.ProductRepository;
 import com.hcl.product.version.service.ProductService;
 
 @Service
-public class ProductServiceImpl implements ProductService
+public class ProductServiceImpl implements ProductService,CommandLineRunner 
 {
 	@Autowired
 	ProductRepository productRepository;
+	
+	private static final String JMS_QUEUE = "jms.queue";
+
+	private final JmsTemplate jmsTemplate;
 	
 
 	
@@ -131,4 +137,26 @@ public class ProductServiceImpl implements ProductService
 		return productModelList;
 	}
 
+
+	
+
+	@Autowired
+	public ProductServiceImpl(JmsTemplate jmsTemplate) {
+		this.jmsTemplate = jmsTemplate;
+	}
+
+	@Override
+	public String addProduct(ProductModel productModel) {
+		System.out.println("Inside ProductServiceImpl..........................................................");
+		String result = "Successfully saved new product data";
+		jmsTemplate.convertAndSend(JMS_QUEUE, productModel);
+		System.out.println("Message sent from ProductServiceImpl.........................................................." +productModel+ " ");
+		return result;
+	}
+
+	@Override
+	public void run(String... args) throws Exception {
+		// TODO Auto-generated method stub
+
+	}
 }

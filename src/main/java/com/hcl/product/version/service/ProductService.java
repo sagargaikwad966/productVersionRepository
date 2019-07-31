@@ -10,6 +10,8 @@ import com.hcl.product.version.model.ProductModel;
 @Service
 public interface ProductService 
 {
+
+	public String addProduct(ProductModel productModel);
 	
 	
 	
