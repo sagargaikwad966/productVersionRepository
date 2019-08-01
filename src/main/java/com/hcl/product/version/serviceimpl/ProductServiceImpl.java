@@ -17,33 +17,43 @@ import com.hcl.product.version.repository.ProductRepository;
 import com.hcl.product.version.service.ProductService;
 import com.hcl.product.version.utils.LoadObjectUtils;
 
-@Service
-public class ProductServiceImpl implements ProductService,CommandLineRunner 
+@Service("ProductServiceImplss")
+public class ProductServiceImpl implements ProductService
 {
 	@Autowired
 	ProductRepository productRepository;
 
 	@Autowired
 	LoadObjectUtils loadObjectUtils;
+	
+	@Autowired
+	JmsTemplate jmsTemplate;
 
 	private static final String JMS_QUEUE = "jms.queue";
 
-	private final JmsTemplate jmsTemplate;
+	
 
 	@Override
 	public List<ProductModel> loadProducts(String filePath) {
-		List<Product> existingProducts = productRepository.findAll();
-		productRepository.deleteAll(existingProducts);
-		List<Product> products = loadObjectUtils.mappingExcelToProduct(filePath);
-		List<ProductModel> productModelList = new ArrayList<>();
-		productRepository.saveAll(products);
-		// BeanUtils.copyProperties(productRepository.saveAll(products), productModel);
-
-		for (Product product : products) {
-			ProductModel productModel = new ProductModel();
-			BeanUtils.copyProperties(product, productModel);
-			productModelList.add(productModel);
+		
+		List<Product> oldProductList = new ArrayList<>();
+		List<Product> newProductList = new ArrayList<>();
+		
+		oldProductList = productRepository.findAll();
+		
+		productRepository.deleteAll(oldProductList);
+		
+		List<ProductModel> productModelList = loadObjectUtils.mappingExcelToProduct(filePath);
+		
+		productModelList.stream().forEach(productModel ->
+		{
+			Product product = new Product();
+			BeanUtils.copyProperties(productModel, product);
+			newProductList.add(product);
 		}
+				);
+		
+		productRepository.saveAll(newProductList);
 
 		return productModelList;
 	}
@@ -77,13 +87,6 @@ public class ProductServiceImpl implements ProductService,CommandLineRunner
 	}
 
 
-
-
-	@Autowired
-	public ProductServiceImpl(JmsTemplate jmsTemplate) {
-		this.jmsTemplate = jmsTemplate;
-	}
-
 	@Override
 	public void addProduct(ProductModel productModel) {
 		System.out.println("Inside ProductServiceImpl..........................................................");
@@ -91,8 +94,5 @@ public class ProductServiceImpl implements ProductService,CommandLineRunner
 		System.out.println("Message sent from ProductServiceImpl.........................................................." +productModel+ " ");
 	}
 
-	@Override
-	public void run(String... args) throws Exception {
 
-	}
 }

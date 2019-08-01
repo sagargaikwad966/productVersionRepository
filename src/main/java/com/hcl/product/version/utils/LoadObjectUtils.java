@@ -24,10 +24,10 @@ import com.hcl.product.version.model.ProductModel;
 @Component
 public class LoadObjectUtils
 {	
-	public List<Product> mappingExcelToProduct(String filePath)
+	public List<ProductModel> mappingExcelToProduct(String filePath)
 	{
 		final String FILE_NAME = filePath;//"D:/product.xlsx";
-		List<Product> productList = new ArrayList<>();
+		List<ProductModel> productModelList = new ArrayList<>();
 		
 		List<String> headerList = new ArrayList<>();
 		headerList.add("productId");
@@ -46,10 +46,7 @@ public class LoadObjectUtils
 		
 		try(Workbook workbook = new XSSFWorkbook(excelFile)) 
 		{
-			
 
-			
-            
             Sheet datatypeSheet = workbook.getSheetAt(0);
             Iterator<Row> iterator = datatypeSheet.iterator();
             Map<String, Integer> headaerMap = new HashMap<>();
@@ -133,9 +130,7 @@ public class LoadObjectUtils
                         model.setStatus(statusCells.getStringCellValue());
                 	
                 	
-                	Product product = new Product();
-                	BeanUtils.copyProperties(model, product);
-                	productList.add(product);
+                	productModelList.add(model);
                 }
             }
 
@@ -151,7 +146,7 @@ public class LoadObjectUtils
 			}
 		}
 
-		return productList;
+		return productModelList;
 	}
 
 }

@@ -11,5 +11,6 @@ import com.hcl.product.version.entity.Product;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, String>
 {
+
 	public Optional<List<Product>> findByStatus(String status);
 }
